@@ -1,0 +1,84 @@
+- alias: "Submit Water Meter Readings"
+  description: "Submit readings 1st-7th, weekdays only"
+  mode: single
+
+  trigger:
+    - platform: time
+      at: "09:00:00"
+
+  condition:
+    - condition: template
+      value_template: "{{ now().day <= 7 }}"
+    - condition: template
+      value_template: "{{ now().isoweekday() <= 5 }}"
+    - condition: state
+      entity_id: input_boolean.water_readings_submitted
+      state: "off"
+
+  action:
+    - variables:
+        meter1_raw: "{{ states('sensor.your_meter_1_sensor') }}"
+        meter2_raw: "{{ states('sensor.your_meter_2_sensor') }}"
+        meter1: "{{ meter1_raw | int(-1) }}"
+        meter2: "{{ meter2_raw | int(-1) }}"
+
+    # Gate: abort if sensors are unavailable (-1 = unknown/unavailable)
+    - if:
+        - condition: template
+          value_template: "{{ meter1 < 0 or meter2 < 0 }}"
+      then:
+        - service: notify.your_notify_service
+          data:
+            message: >
+              ✗ Water readings SKIPPED — sensor unavailable.
+              {% if meter1 < 0 %}Meter 1: "{{ meter1_raw }}"{% endif %}
+              {% if meter2 < 0 %}Meter 2: "{{ meter2_raw }}"{% endif %}
+            title: "Sofiyskavoda Submission - SKIPPED"
+      else:
+        - service: shell_command.submit_water_readings
+          data:
+            meter1: "{{ meter1 }}"
+            meter2: "{{ meter2 }}"
+          response_variable: result
+
+        - if:
+            - condition: template
+              value_template: >
+                {% set r = result.stdout | from_json %}
+                {{ r.status == 'success' }}
+          then:
+            - service: notify.your_notify_service
+              data:
+                message: "✓ Water readings submitted: {{ meter1 }}, {{ meter2 }}"
+                title: "Sofiyskavoda Submission"
+            - service: input_boolean.turn_on
+              target:
+                entity_id: input_boolean.water_readings_submitted
+          else:
+            - service: notify.your_notify_service
+              data:
+                message: >
+                  ✗ Submission FAILED.
+                  {% if result.stdout | trim | length > 0 %}
+                    {% set r = result.stdout | from_json %}
+                    Exit code {{ r.exit_code }}: {{ r.last_log_entry }}
+                  {% else %}
+                    SSH command did not execute (exit 255). Check HA logs.
+                  {% endif %}
+                title: "Sofiyskavoda Submission - ERROR"
+
+- alias: "Reset Water Readings Flag"
+  description: "Reset flag on 1st of month"
+
+  trigger:
+    - platform: time
+      at: "00:01:00"
+
+  condition:
+    - condition: template
+      value_template: "{{ now().day == 1 }}"
+
+  action:
+    - service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.water_readings_submitted
