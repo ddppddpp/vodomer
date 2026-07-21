@@ -2,10 +2,10 @@
 ## A playwright automation for water meter reading submission
 
 ### Why Vodomer?
-Vodomer allows you to do a headless submission of your water meter readings to the website of the sole water utility company in Sofia, Bulgaria - [Sofiyska Voda](https://sofiyskavoda.bg), without the need to manually fill-in a web form a click on Submit button like we used to do back in the 20th century.
+Vodomer allows you to do a headless submission of your water meter readings to the website of the sole Water Utility company in Sofia, Bulgaria - [Sofiyska Voda](https://sofiyskavoda.bg), without the need to manually fill-in a web form a click on Submit button like we used to do back in the 20th century.
 
 ### Requirements
-- the actual meter data. Getting it is beyond the script scope, but you can check out [my approach](BACKGROUND.md).
+- The actual meter data. Getting it is beyond the script scope, but you can check out [my approach](BACKGROUND.md).
 - a registered [profile](https://www.sofiyskavoda.bg/registration) on Sofiyska Voda's web portal
 - A Linux host (technically, should work on any OS)
 - Node.js >= 16
