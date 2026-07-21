@@ -49,7 +49,7 @@ Submitting readings...
 After submit URL: https://www.sofiyskavoda.bg/cp/customer-accounts/111111/user-readings/create
 RESULT: Submission confirmed.
 ```
-Optionally, automate reading submission. You can find an example with Home Assitant [here](AUTOMATION.md).
+Optionally, automate reading submission. You can find an example with Home Assitant in [AUTOMATION.md](AUTOMATION.md).
 ### Contributions
 This automation has been verified to work only for my personal account.
 Reach out if you'd like to test and need help setting it up.
