@@ -12,3 +12,6 @@ node_modules/
 
 #MacOS
 .DS_Store
+.github-sync-config
+setup-dual-repo.sh
+sync-to-github.sh

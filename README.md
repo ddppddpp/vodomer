@@ -4,9 +4,11 @@
 ### Why Vodomer?
 Vodomer allows you to do a headless submission of your water meter readings to the website of the sole Water Utility company in Sofia, Bulgaria - [Sofiyska Voda](https://sofiyskavoda.bg), without the need to manually fill-in a web form a click on Submit button like we used to do back in the 20th century.
 
+
+
 ### Requirements
-- The actual meter data. Getting it is beyond the script scope, but you can check out [my approach](BACKGROUND.md).
-- a registered [profile](https://www.sofiyskavoda.bg/registration) on Sofiyska Voda's web portal
+- The actual meter data. Getting it is beyond the script scope, but you can check out [my approach](BACKGROUND.md) and the [architecture](ARCHITECTURE.md).
+- a registered [profile](PROFILE.md) on Sofiyska Voda's web portal
 - A Linux host (technically, should work on any OS)
 - Node.js >= 16
 - Playwright
@@ -23,6 +25,19 @@ cp .env-example .env                          # then edit with real credentials
 bash install.sh
 ```
 This sets up a directory in /opt/sofiyskavoda where the execution scripts live.
+
+### Environment vars and how to get them
+
+- ACCOUNT_ID     = 123456        (URL path segment, see [profile](PROFILE.md)                         
+- USERNAME       = email         (login credential, see [profile](PROFILE.md))                         
+- PASSWORD       = secret        (login credential, see [profile](PROFILE.md))
+- METER1_ID      = 654321        (form field name), see [background](BACKGROUND.md)
+- METER1_SERIAL  = 11111111      (check display or  see [profile](PROFILE.md))
+- METER2_ID      = 987654        (form field name), see [background](BACKGROUND.md)
+- METER2_SERIAL  = 22222222      (check display or  see [profile](PROFILE.md))
+
+
+
 
 ### Usage
 Submit a report by using the wrapper-script
